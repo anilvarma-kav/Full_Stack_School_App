@@ -3,6 +3,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const { sequelize, models } = require('./db');
 const { User, Course } = models;
@@ -16,6 +17,9 @@ const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
+
+// Add express middleware that can be used to enable CORS
+app.use(cors());
 
 //Parse incoming bodies in a middleware before your handlers, available under
 // req.body property
