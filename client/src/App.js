@@ -4,7 +4,6 @@ import {
     Route,
     Switch
 } from 'react-router-dom';
-import axios from 'axios';
 import Header from './components/Header';
 import NotFound from './components/NotFound';
 import Courses from './components/Courses';
@@ -15,46 +14,33 @@ import UserSignUp from './components/UserSignUp';
 import UserSignIn from './components/UserSignIn';
 import UserSignOut from './components/UserSignOut';
 
-import apiBaseURL from './config';
 import './styles/global.css';
 
-export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            courses : [],
-        }
-    }
-    getCourses = () => {
-        axios.get(`${apiBaseURL.apiBaseURL}/courses`)
-            .then( res => {
-                console.log(res.data.courses);
-                this.setState({
-                    courses : res.data.courses,
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
-    // call getCourses() when App component mounted
-    componentDidMount() {
-        this.getCourses();
-    }
 
+import withContext from "./Context";
+
+import PrivateRoute from "./PrivateRoute";
+
+const UserSignUpWithContext = withContext(UserSignUp);
+const UserSignInWithContext = withContext(UserSignIn);
+const UserSignOutWithContext = withContext(UserSignOut);
+const HeaderWithContext = withContext(Header)
+
+
+export default class App extends React.Component {
     render() {
         return (
             <Router>
                 <div>
-                    <Header/>
+                    <HeaderWithContext/>
                     <Switch>
-                        <Route exact path="/" render = {() => <Courses courses={this.state.courses}/> }/>
-                        <Route path="/courses/create" component={CreateCourse} />
-                        <Route path="/courses/:id/update" component={UpdateCourse}/>
-                        <Route path="/courses/:id" render={() => <CourseDetail courses={this.state.courses}/>}/>
-                        <Route path="/signin" component={UserSignIn} />
-                        <Route path="/signup" component={UserSignUp} />
-                        <Route path="/signout" component={UserSignOut} />
+                        <Route exact path="/" component={Courses}/>
+                        <PrivateRoute path="/courses/create" component={CreateCourse} />
+                        <PrivateRoute path="/courses/:id/update" component={UpdateCourse}/>
+                        <Route path="/courses/:id" component={CourseDetail}/>
+                        <Route path="/signin" component={UserSignInWithContext} />
+                        <Route path="/signup" component={UserSignUpWithContext} />
+                        <Route path="/signout" component={UserSignOutWithContext} />
                         <Route component={NotFound}/>
                     </Switch>
                 </div>
