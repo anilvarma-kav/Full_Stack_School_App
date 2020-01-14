@@ -24,8 +24,8 @@ import PrivateRoute from "./PrivateRoute";
 const UserSignUpWithContext = withContext(UserSignUp);
 const UserSignInWithContext = withContext(UserSignIn);
 const UserSignOutWithContext = withContext(UserSignOut);
-const HeaderWithContext = withContext(Header)
-
+const HeaderWithContext = withContext(Header);
+const CourseDetailWithContext = withContext(CourseDetail);
 
 export default class App extends React.Component {
     render() {
@@ -37,7 +37,7 @@ export default class App extends React.Component {
                         <Route exact path="/" component={Courses}/>
                         <PrivateRoute path="/courses/create" component={CreateCourse} />
                         <PrivateRoute path="/courses/:id/update" component={UpdateCourse}/>
-                        <Route path="/courses/:id" component={CourseDetail}/>
+                        <Route path="/courses/:id" component={CourseDetailWithContext}/>
                         <Route path="/signin" component={UserSignInWithContext} />
                         <Route path="/signup" component={UserSignUpWithContext} />
                         <Route path="/signout" component={UserSignOutWithContext} />
