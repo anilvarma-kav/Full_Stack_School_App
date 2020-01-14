@@ -60,7 +60,7 @@ export default class UserSignIn extends React.Component {
 
     submit = () => {
         const { context } = this.props;
-        const  { from } = this.props.location.state || {from: {pathname: '/authenticated'}};
+        const  { from } = this.props.location.state || {from: {pathname: '/'}};
         const { username, password} = this.state;
         context.actions.signIn(username, password)
             .then( user => {

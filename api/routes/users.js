@@ -76,7 +76,7 @@ router.post('/', [
         // Set the status to 201 Created and end the response
         return res.location('/').status(201).end();
     }else {
-        res.status(400).json({message: "Email address already exists. Please use different email address"});
+        res.status(400).json({errors: ["Email address already exists. Please use different email address"]});
     }
 
 

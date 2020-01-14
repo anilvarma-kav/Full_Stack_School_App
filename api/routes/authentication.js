@@ -49,7 +49,7 @@ const authenticateUser = async (req, res, next) => {
         console.log(message);
 
         // Return a response with a 401 Unauthorized HTTP status code
-        res.status(401).json({message: 'Access Denied'});
+        res.status(401).json({errors: ['Access Denied']});
     } else {
         // call next() method if authentication succeeded
 
