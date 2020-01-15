@@ -15,7 +15,7 @@ import config from "../config";
      }
      componentDidMount() {
          const id = this.props.match.params.id;
-         console.log(id);
+         //console.log(id);
          fetch(`${config.apiBaseURL}/courses/${id}`)
              .then(res => res.json())
              .then(res => {
@@ -51,8 +51,16 @@ import config from "../config";
          const authUser = context.authenticatedUser;
          let html;
          if(authUser){
-             if(authUser.id === this.state.userId || authUser.id){
-                 html = (<div className="grid-100"><span><Link className="button" to="courses/id/update">Update Course</Link><Link className="button" to="id/delete">Delete Course</Link></span></div>)
+             //console.log(authUser.id);
+             if(authUser.id === this.state.userId ){
+                 const {id} = this.state;
+                 //console.log(id);
+                 html = (
+                     <span>
+                        <a className="button" href={`/courses/${id}/update`}>Update Course</a>
+                        <a className="button" href="#">Delete Course</a>
+                     </span>
+             );
              }
          }
         return (
@@ -60,22 +68,21 @@ import config from "../config";
                 <div className="actions--bar">
                     <div className="bounds">
                         <div className="grid-100">
-                            <span>
                         {html}
                         <Link className="button button-secondary" to="/">Return to List</Link>
-                        </span>
+
                         </div>
                     </div>
                 </div>
                 <div className="bounds course--detail">
                     <div className="grid-66">
                         <div className="course--header">
-                            <h4 className="course--label">label</h4>
-                            <h3 className="course--title">Course Title</h3>
-                            <p>By Joe Smith</p>
+                            <h4 className="course--label">Course</h4>
+                            <h3 className="course--title">{this.state.title}</h3>
+                            <p>By {this.state.user.firstName} {this.state.user.lastName}</p>
                         </div>
                         <div className="course--description">
-                            <p> <ReactMarkdown>Course Description</ReactMarkdown></p>
+                            <p> <ReactMarkdown>{this.state.description}</ReactMarkdown></p>
                         </div>
                     </div>
                     <div className="grid-25 grid-right">
@@ -83,11 +90,11 @@ import config from "../config";
                             <ul className="course--stats--list">
                                 <li className="course--stats--list--item">
                                     <h4>Estimated Time</h4>
-                                    <h3>Course Estimated Time</h3>
+                                    <h3>{this.state.estimatedTime}</h3>
                                 </li>
                                 <li className="course--stats--list--item">
                                     <h4>Materials Needed</h4>
-                                    <ReactMarkdown>{"points"}</ReactMarkdown>
+                                    <ReactMarkdown>{this.state.materialsNeeded}</ReactMarkdown>
                                 </li>
                             </ul>
                         </div>

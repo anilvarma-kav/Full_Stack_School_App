@@ -26,7 +26,7 @@ const UserSignInWithContext = withContext(UserSignIn);
 const UserSignOutWithContext = withContext(UserSignOut);
 const HeaderWithContext = withContext(Header);
 const CourseDetailWithContext = withContext(CourseDetail);
-
+const CreateCourseWithContext = withContext(CreateCourse);
 export default class App extends React.Component {
     render() {
         return (
@@ -35,7 +35,7 @@ export default class App extends React.Component {
                     <HeaderWithContext/>
                     <Switch>
                         <Route exact path="/" component={Courses}/>
-                        <PrivateRoute path="/courses/create" component={CreateCourse} />
+                        <PrivateRoute path="/courses/create" component={CreateCourseWithContext} />
                         <PrivateRoute path="/courses/:id/update" component={UpdateCourse}/>
                         <Route path="/courses/:id" component={CourseDetailWithContext}/>
                         <Route path="/signin" component={UserSignInWithContext} />

@@ -9,7 +9,7 @@ export default class Courses extends Component {
         fetch(`${config.apiBaseURL}/courses`)
             .then(res => res.json())
             .then(res => {
-                console.log(res);
+                //console.log(res);
                 this.setState({courses: res.courses});
             })
             .catch( err => {
