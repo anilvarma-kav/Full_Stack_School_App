@@ -6,15 +6,16 @@ export default class Courses extends Component {
         courses : [],
     };
     componentDidMount() {
-        fetch(`${config.apiBaseURL}/courses`)
-            .then(res => res.json())
-            .then(res => {
-                //console.log(res);
-                this.setState({courses: res.courses});
+        const {context} = this.props;
+        const authUser = context.authenticatedUser;
+        context.data.getCourses()
+            .then(data => {
+                this.setState({courses: data.courses});
             })
-            .catch( err => {
+            .catch(err => {
                 console.log(err);
             })
+        ;
     }
 
     render() {

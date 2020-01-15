@@ -11,42 +11,35 @@ import config from "../config";
          materialsNeeded:'',
          user: {},
          userId: '',
-         exists: false,
+         exists: true,
      }
      componentDidMount() {
          const id = this.props.match.params.id;
          //console.log(id);
-         fetch(`${config.apiBaseURL}/courses/${id}`)
-             .then(res => res.json())
-             .then(res => {
-                 console.log(res);
-                 if(res.course){
-                     const course = res.course;
-                     this.setState({
-                         id: course.id,
-                         title: course.title,
-                         description : course.description,
-                         estimatedTime: course.estimatedTime,
-                         materialsNeeded:course.materialsNeeded,
-                         user: course.user,
-                         userId: course.userId,
-                         exists: true,
-                     });
-                 }
-                 else{
-                     this.setState({
-                        exists: false,
-                     });
-                 }
-
+         const {context} = this.props;
+         context.data.getCourse(id)
+             .then(data => {
+                 this.setState({id: data.course.id,
+                     title: data.course.title,
+                     description : data.course.description,
+                     estimatedTime: data.course.estimatedTime,
+                     materialsNeeded:data.course.materialsNeeded,
+                     user: data.course.user,
+                     userId: data.course.userId,
+                     exists: true,
+                 });
              })
-             .catch( err => {
+             .catch(err => {
                  console.log(err);
-             });
-
+                 this.setState({exists: false});
+             })
+         ;
      }
 
      render() {
+         if(!this.state.exists){
+             this.props.history.push('/notfound');
+         }
          const {context} = this.props;
          const authUser = context.authenticatedUser;
          let html;

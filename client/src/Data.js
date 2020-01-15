@@ -20,7 +20,36 @@ export default class Data {
         }
         return fetch(url, options);
     }
+    async getCourses() {
+        const response = await this.api(`/courses`, 'GET', null);
+        if (response.status === 200) {
+            return response.json().then(data => data);
+        }
+        else if (response.status === 500) {
+            return response.json().then(data => {
+                return data.errors;
+            });
+        }
 
+        else {
+            throw new Error();
+        }
+    }
+    async getCourse(id) {
+        const response = await this.api(`/courses/${id}`, 'GET', null);
+        if (response.status === 200) {
+            return response.json().then(data => data);
+        }
+        else if (response.status === 500) {
+            return response.json().then(data => {
+                return data.errors;
+            });
+        }
+
+        else {
+            throw new Error();
+        }
+    }
     async getUser(emailAddress, password) {
         const response = await this.api(`/users`, 'GET', null, true, {emailAddress, password});
         if (response.status === 200) {
@@ -54,6 +83,29 @@ export default class Data {
         const emailAddress = user.emailAddress;
         const password = user.password;
         const response = await this.api('/courses', 'POST', course,true, {emailAddress, password});
+        if (response.status === 201) {
+            return [];
+        }
+        else if(response.status === 401){
+            return response.json().then(data => {
+                return data.errors;
+            });
+        }
+        else if (response.status === 400){
+            return response.json().then(data => {
+                return data.errors;
+            });
+        }
+        else {
+            throw new Error();
+        }
+    }
+
+    async updateCourse(course,id, user) {
+        const emailAddress = user.emailAddress;
+        const password = user.password;
+
+        const response = await this.api('/courses', 'PUT', course,true, {emailAddress, password});
         if (response.status === 201) {
             return [];
         }

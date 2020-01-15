@@ -1,57 +1,172 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import Form from './Form';
+import config from "../config";
 
 export default class UpdateCourse extends React.Component {
+    state = {
+        id:'',
+        title : '',
+        description: '',
+        estimatedTime: '',
+        materialsNeeded: '',
+        userId:'',
+        user: {},
+        errors:[],
+        forbidden: false,
+        exists: true,
+    }
+    componentDidMount() {
+        const id = this.props.match.params.id;
+        //console.log(id);
+        const {context} = this.props;
+        fetch(`${config.apiBaseURL}/courses/${id}`)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+
+                    if(res.course){
+                        const course = res.course;
+                        if(context.authenticatedUser.id !== course.userId){
+                            this.setState({forbidden : true});
+                        }
+                        else{
+                            this.setState({
+                                id: course.id,
+                                title: course.title,
+                                description : course.description,
+                                estimatedTime: course.estimatedTime,
+                                materialsNeeded:course.materialsNeeded,
+                                user: course.user,
+                                userId: course.userId,
+                                exists: true,
+                            });
+                        }
+
+                    }
+                    else{
+                        this.setState({
+                            exists: false,
+                        });
+                    }
+
+
+            })
+            .catch( err => {
+                console.log(err);
+            });
+        if(context.authenticatedUser.id !== this.state.userId){
+            console.log(context.authenticatedUser.id, this.state.userId);
+            //this.setState({forbidden : true});
+        }
+    }
+
     render() {
+        const {context} = this.props;
+        const authUser = context.authenticatedUser;
+        const courseId = this.props.match.params.id;
+        const {
+            title,
+            id,
+            description,
+            estimatedTime,
+            materialsNeeded,
+            userId,
+            user,
+            errors,
+        } = this.state;
+        if(this.state.forbidden){
+            this.props.history.push('/forbidden');
+        }
+        if(!this.state.exists){
+            this.props.history.push('/notfound');
+        }
         return (
             <div className="bounds course--detail">
                 <h1>Update Course</h1>
-                <div>
-                    <form>
-                        <div className="grid-66">
-                            <div className="course--header">
-                                <h4 className="course--label">Course</h4>
-                                <div><input id="title" name="title" type="text"
-                                            className="input-title course--title--input" placeholder="Course title..."
-                                            defaultValue="Build a Basic Bookcase"/></div>
-                                <p>By Joe Smith</p>
-                            </div>
-                            <div className="course--description">
-                                <div><textarea id="description" name="description" className
-                                               placeholder="Course description..."
-                                               defaultValue={"High-end furniture projects are great to dream about. But unless you have a well-equipped shop and some serious woodworking experience to draw on, it can be difficult to turn the dream into a reality.\n\nNot every piece of furniture needs to be a museum showpiece, though. Often a simple design does the job just as well and the experience gained in completing it goes a long way toward making the next project even better.\n\nOur pine bookcase, for example, features simple construction and it's designed to be built with basic woodworking tools. Yet, the finished project is a worthy and useful addition to any room of the house. While it's meant to rest on the floor, you can convert the bookcase to a wall-mounted storage unit by leaving off the baseboard. You can secure the cabinet to the wall by screwing through the cabinet cleats into the wall studs.\n\nWe made the case out of materials available at most building-supply dealers and lumberyards, including 1/2 x 3/4-in. parting strip, 1 x 2, 1 x 4 and 1 x 10 common pine and 1/4-in.-thick lauan plywood. Assembly is quick and easy with glue and nails, and when you're done with construction you have the option of a painted or clear finish.\n\nAs for basic tools, you'll need a portable circular saw, hammer, block plane, combination square, tape measure, metal rule, two clamps, nail set and putty knife. Other supplies include glue, nails, sandpaper, wood filler and varnish or paint and shellac.\n\nThe specifications that follow will produce a bookcase with overall dimensions of 10 3/4 in. deep x 34 in. wide x 48 in. tall. While the depth of the case is directly tied to the 1 x 10 stock, you can vary the height, width and shelf spacing to suit your needs. Keep in mind, though, that extending the width of the cabinet may require the addition of central shelf supports."}/>
+                <Form
+                    cancel={this.cancel}
+                    errors={errors}
+                    submit={this.submit}
+                    submitButtonText="Update Course"
+                    elements={() => (
+                        <React.Fragment>
+                            <div className="grid-66">
+                                <div className="course--header">
+                                    <h4 className="course--label">Course</h4>
+                                    <div><input id="title" name="title" type="text" value={title}
+                                                className="input-title course--title--input" onChange={this.change} placeholder="Course title..."
+                                    /></div>
+                                    <p>By {user.firstName} {user.lastName}</p>
+                                </div>
+                                <div className="course--description">
+                                    <div><textarea id="description" name="description" value={description}
+                                                   onChange={this.change} placeholder="Course description..." /></div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="grid-25 grid-right">
-                            <div className="course--stats">
-                                <ul className="course--stats--list">
-                                    <li className="course--stats--list--item">
-                                        <h4>Estimated Time</h4>
-                                        <div><input id="estimatedTime" name="estimatedTime" type="text"
-                                                    className="course--time--input" placeholder="Hours"
-                                                    defaultValue="14 hours"/></div>
-                                    </li>
-                                    <li className="course--stats--list--item">
-                                        <h4>Materials Needed</h4>
-                                        <div><textarea id="materialsNeeded" name="materialsNeeded" className
-                                                       placeholder="List materials..."
-                                                       defaultValue={"* 1/2 x 3/4 inch parting strip\n* 1 x 2 common pine\n* 1 x 4 common pine\n* 1 x 10 common pine\n* 1/4 inch thick lauan plywood\n* Finishing Nails\n* Sandpaper\n* Wood Glue\n* Wood Filler\n* Minwax Oil Based Polyurethane\n"}/>
-                                        </div>
-                                    </li>
-                                </ul>
+                            <div className="grid-25 grid-right">
+                                <div className="course--stats">
+                                    <ul className="course--stats--list">
+                                        <li className="course--stats--list--item">
+                                            <h4>Estimated Time</h4>
+                                            <div><input id="estimatedTime" name="estimatedTime" type="text" value={estimatedTime}
+                                                        className="course--time--input" onChange={this.change} placeholder="Hours" />
+                                            </div>
+                                        </li>
+                                        <li className="course--stats--list--item">
+                                            <h4>Materials Needed</h4>
+                                            <div><textarea id="materialsNeeded" name="materialsNeeded" className value={materialsNeeded}
+                                                           onChange={this.change} placeholder="List materials..." /></div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div className="grid-100 pad-bottom">
-                            <button className="button" type="submit">Update Course</button>
-                            <button className="button button-secondary"
-                                    onClick="event.preventDefault(); location.href='course-detail.html';">Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                        </React.Fragment>
+                    )} />
             </div>
         )
     }
+    change = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        this.setState( () => {
+            return{
+                [name]: value
+            }
+
+        });
+    };
+    submit = () => {
+        const {context} = this.props;
+        const {
+            title,
+            description,
+            estimatedTime,
+            materialsNeeded,
+            userId,
+        } = this.state;
+        const course = {
+            title,
+            description,
+            estimatedTime,
+            materialsNeeded,
+            userId
+        };
+        context.data.updateCourse(course, this.state.user)
+            .then( errors => {
+                if(errors.length){
+                    this.setState({errors});
+                }
+                else{
+                    console.log(`Course: ${course.title} successfully created`);
+                    this.props.history.push('/');
+                }
+            })
+            .catch( err => {
+                console.log(err);
+                this.props.history.push('/error');
+            })
+    };
+    cancel = () => {
+        this.props.history.push('/');
+    };
 }
