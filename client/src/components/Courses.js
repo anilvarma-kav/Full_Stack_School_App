@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
-import config from "../config";
 export default class Courses extends Component {
     state = {
         courses : [],
     };
     componentDidMount() {
         const {context} = this.props;
-        const authUser = context.authenticatedUser;
         context.data.getCourses()
             .then(data => {
                 this.setState({courses: data.courses});
@@ -23,11 +21,10 @@ export default class Courses extends Component {
         const courses = this.state.courses;
         if(courses.length){
             html = courses.map( course => {
-                let href = `/courses/${course.id}`;
                 return (
-                    <div className="grid-33"><a className="course--module course--link" href={href}>
-                        <h4 className="course--label">Course</h4>
-                        <h3 className="course--title">{course.title}</h3>
+                    <div className="grid-33" key={course.id}><a className="course--module course--link" href={`/courses/${course.id}`} >
+                        <h4  className="course--label">Course</h4>
+                        <h3  className="course--title">{course.title}</h3>
                     </a></div>
                 )
             })

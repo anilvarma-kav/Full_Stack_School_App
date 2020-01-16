@@ -1,8 +1,7 @@
 import React from 'react';
 import {Link, withRouter} from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import config from "../config";
- class CourseDetail extends React.Component {
+ class CourseDetail extends React.PureComponent {
      state = {
          id: '',
          title: '',
@@ -12,22 +11,26 @@ import config from "../config";
          user: {},
          userId: '',
          exists: true,
-     }
+     };
      componentDidMount() {
          const id = this.props.match.params.id;
-         //console.log(id);
          const {context} = this.props;
          context.data.getCourse(id)
              .then(data => {
-                 this.setState({id: data.course.id,
-                     title: data.course.title,
-                     description : data.course.description,
-                     estimatedTime: data.course.estimatedTime,
-                     materialsNeeded:data.course.materialsNeeded,
-                     user: data.course.user,
-                     userId: data.course.userId,
-                     exists: true,
-                 });
+                 if(data.course){
+                     this.setState({id: data.course.id,
+                         title: data.course.title,
+                         description : data.course.description,
+                         estimatedTime: data.course.estimatedTime,
+                         materialsNeeded:data.course.materialsNeeded,
+                         user: data.course.user,
+                         userId: data.course.userId,
+                         exists: true,
+                     });
+                 }
+                 else {
+                     this.setState({exists: false});
+                 }
              })
              .catch(err => {
                  console.log(err);
@@ -44,14 +47,12 @@ import config from "../config";
          const authUser = context.authenticatedUser;
          let html;
          if(authUser){
-             //console.log(authUser.id);
              if(authUser.id === this.state.userId ){
                  const {id} = this.state;
-                 //console.log(id);
                  html = (
                      <span>
                         <a className="button" href={`/courses/${id}/update`}>Update Course</a>
-                        <a className="button" href="#">Delete Course</a>
+                        <a className="button" onClick={this.deleteCourse}>Delete Course </a>
                      </span>
              );
              }
@@ -75,7 +76,7 @@ import config from "../config";
                             <p>By {this.state.user.firstName} {this.state.user.lastName}</p>
                         </div>
                         <div className="course--description">
-                            <p> <ReactMarkdown>{this.state.description}</ReactMarkdown></p>
+                             <ReactMarkdown>{this.state.description}</ReactMarkdown>
                         </div>
                     </div>
                     <div className="grid-25 grid-right">
@@ -96,6 +97,20 @@ import config from "../config";
             </div>
         )
     }
+    deleteCourse = () => {
+         const {context} = this.props;
+         const user = context.authenticatedUser;
+         const courseId = this.state.id;
+         context.data.deleteCourse(courseId, user)
+             .then(() => {
+                 console.log(`${this.state.title} was deleted successfully`);
+                 this.props.history.push('/');
+             })
+             .catch(err => {
+                 console.log(err);
+             });
+         console.log('Deleted');
+    };
 }
 
 export default withRouter (CourseDetail);

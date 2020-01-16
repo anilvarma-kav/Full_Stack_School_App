@@ -41,7 +41,7 @@ export default class CreateCourse extends React.Component {
                                     <p>By {this.state.user.firstName} {this.state.user.lastName}</p>
                                 </div>
                                 <div className="course--description">
-                                    <div><textarea id="description" name="description" className
+                                    <div><textarea id="description" name="description"
                                                    onChange={this.change} placeholder="Course description..." /></div>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@ export default class CreateCourse extends React.Component {
                                         </li>
                                         <li className="course--stats--list--item">
                                             <h4>Materials Needed</h4>
-                                            <div><textarea id="materialsNeeded" name="materialsNeeded" className
+                                            <div><textarea id="materialsNeeded" name="materialsNeeded"
                                                           onChange={this.change} placeholder="List materials..." /></div>
                                         </li>
                                     </ul>

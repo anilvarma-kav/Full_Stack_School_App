@@ -1,8 +1,8 @@
 import React from 'react';
 import Form from './Form';
-import config from "../config";
 
-export default class UpdateCourse extends React.Component {
+
+export default class UpdateCourse extends React.PureComponent {
     state = {
         id:'',
         title : '',
@@ -17,60 +17,37 @@ export default class UpdateCourse extends React.Component {
     }
     componentDidMount() {
         const id = this.props.match.params.id;
-        //console.log(id);
         const {context} = this.props;
-        fetch(`${config.apiBaseURL}/courses/${id}`)
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
-
-                    if(res.course){
-                        const course = res.course;
-                        if(context.authenticatedUser.id !== course.userId){
-                            this.setState({forbidden : true});
-                        }
-                        else{
-                            this.setState({
-                                id: course.id,
-                                title: course.title,
-                                description : course.description,
-                                estimatedTime: course.estimatedTime,
-                                materialsNeeded:course.materialsNeeded,
-                                user: course.user,
-                                userId: course.userId,
-                                exists: true,
-                            });
-                        }
-
-                    }
-                    else{
-                        this.setState({
-                            exists: false,
-                        });
-                    }
-
-
+        context.data.getCourse(id)
+            .then(data => {
+                if(context.authenticatedUser.id !== data.course.userId){
+                    this.setState({forbidden : true});
+                }
+                else {
+                    this.setState({
+                        id: data.course.id,
+                        title: data.course.title,
+                        description : data.course.description,
+                        estimatedTime: data.course.estimatedTime,
+                        materialsNeeded:data.course.materialsNeeded,
+                        user: data.course.user,
+                        userId: data.course.userId,
+                        exists: true,
+                    });
+                }
             })
-            .catch( err => {
+            .catch(err => {
                 console.log(err);
+                this.setState({exists: false});
             });
-        if(context.authenticatedUser.id !== this.state.userId){
-            console.log(context.authenticatedUser.id, this.state.userId);
-            //this.setState({forbidden : true});
-        }
     }
 
     render() {
-        const {context} = this.props;
-        const authUser = context.authenticatedUser;
-        const courseId = this.props.match.params.id;
         const {
             title,
-            id,
             description,
             estimatedTime,
             materialsNeeded,
-            userId,
             user,
             errors,
         } = this.state;
@@ -114,7 +91,7 @@ export default class UpdateCourse extends React.Component {
                                         </li>
                                         <li className="course--stats--list--item">
                                             <h4>Materials Needed</h4>
-                                            <div><textarea id="materialsNeeded" name="materialsNeeded" className value={materialsNeeded}
+                                            <div><textarea id="materialsNeeded" name="materialsNeeded"  value={materialsNeeded}
                                                            onChange={this.change} placeholder="List materials..." /></div>
                                         </li>
                                     </ul>
@@ -151,7 +128,7 @@ export default class UpdateCourse extends React.Component {
             materialsNeeded,
             userId
         };
-        context.data.updateCourse(course, this.state.user)
+        context.data.updateCourse(course,this.state.id, context.authenticatedUser)
             .then( errors => {
                 if(errors.length){
                     this.setState({errors});
