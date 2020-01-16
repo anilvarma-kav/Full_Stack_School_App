@@ -1,6 +1,8 @@
 import React from 'react';
+// Required components
 import Form from './Form';
 
+//CreateCourse Component
 export default class CreateCourse extends React.Component {
     state = {
         title : '',
@@ -67,6 +69,7 @@ export default class CreateCourse extends React.Component {
             </div>
         )
     }
+    // Updating state for each change in the input fields
     change = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -77,6 +80,8 @@ export default class CreateCourse extends React.Component {
 
         });
     };
+
+    // Call API for creating new course
     submit = () => {
         const {context} = this.props;
         const {
@@ -105,9 +110,10 @@ export default class CreateCourse extends React.Component {
             })
             .catch( err => {
                 console.log(err);
-                this.props.history.push('/error');
+                this.props.history.push('/error'); // For handling rejected promises
             })
     };
+    // Redirected to Home page if cancel link is clicked
     cancel = () => {
         this.props.history.push('/');
     };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// Functional Header Component
 export default ({context}) => {
         const authUser = context.authenticatedUser;
         return (

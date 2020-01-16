@@ -6,13 +6,15 @@ export default class Courses extends Component {
     };
     componentDidMount() {
         const {context} = this.props;
+
+        //API Call for getting courses
         context.data.getCourses()
             .then(data => {
                 this.setState({courses: data.courses});
             })
             .catch(err => {
                 console.log(err);
-                this.props.history.push('/error');
+                this.props.history.push('/error'); // For handling rejected promises
             })
         ;
     }

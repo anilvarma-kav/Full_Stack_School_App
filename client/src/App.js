@@ -4,6 +4,10 @@ import {
     Route,
     Switch
 } from 'react-router-dom';
+
+import './styles/global.css';
+
+// Required Components
 import Header from './components/Header';
 import NotFound from './components/NotFound';
 import Courses from './components/Courses';
@@ -14,13 +18,12 @@ import UserSignUp from './components/UserSignUp';
 import UserSignIn from './components/UserSignIn';
 import UserSignOut from './components/UserSignOut';
 import UnhandledError from "./components/UnhandledError";
-import './styles/global.css';
 
 
 import withContext from "./Context";
-
 import PrivateRoute from "./PrivateRoute";
 import Forbidden from "./components/Forbidden";
+
 const CoursesWithContext = withContext(Courses);
 const UserSignUpWithContext = withContext(UserSignUp);
 const UserSignInWithContext = withContext(UserSignIn);
@@ -29,6 +32,8 @@ const HeaderWithContext = withContext(Header);
 const CourseDetailWithContext = withContext(CourseDetail);
 const CreateCourseWithContext = withContext(CreateCourse);
 const UpdateCourseWithContext = withContext(UpdateCourse);
+
+// App Component
 export default class App extends React.Component {
     render() {
         return (
@@ -52,7 +57,5 @@ export default class App extends React.Component {
             </Router>
         );
     }
-
-
 }
 

@@ -1,12 +1,15 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+
+//Required Component
 import Form from "./Form";
+
 export default class UserSignIn extends React.Component {
     state = {
         username: '',
         password: '',
         errors: [],
-    }
+    };
     render() {
         const {
             username,

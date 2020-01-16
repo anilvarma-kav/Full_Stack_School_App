@@ -18,6 +18,8 @@ export default class UpdateCourse extends React.PureComponent {
     componentDidMount() {
         const id = this.props.match.params.id;
         const {context} = this.props;
+
+        // Call API to get the course with id
         context.data.getCourse(id)
             .then(data => {
                 console.log(data);
@@ -48,7 +50,7 @@ export default class UpdateCourse extends React.PureComponent {
             })
             .catch(err => {
                 console.log(err);
-                this.setState({exists: false});
+                this.props.history.push('/error'); // handle rejected promises
             });
     }
 
@@ -61,9 +63,11 @@ export default class UpdateCourse extends React.PureComponent {
             user,
             errors,
         } = this.state;
+        // If forbidden for current user
         if(this.state.forbidden){
             this.props.history.push('/forbidden');
         }
+        //If course doesn't exists
         if(!this.state.exists){
             this.props.history.push('/notfound');
         }
@@ -112,6 +116,8 @@ export default class UpdateCourse extends React.PureComponent {
             </div>
         )
     }
+
+    // Updating state for each change in the input fields
     change = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -122,6 +128,8 @@ export default class UpdateCourse extends React.PureComponent {
 
         });
     };
+
+    // Call API for updating the course
     submit = () => {
         const {context} = this.props;
         const {

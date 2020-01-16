@@ -1,7 +1,7 @@
 import React from 'react'
-//router
-import { Link } from 'react-router-dom'
 
+import { Link } from 'react-router-dom'
+// Unhandled Error component
 const UnhandledError = () => {
     return(
         <div className="bounds">

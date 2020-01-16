@@ -1,6 +1,9 @@
 import React from 'react';
 import {Link, withRouter} from "react-router-dom";
+
+// React Markdown for nice formatting while displaying the course details
 import ReactMarkdown from "react-markdown";
+
  class CourseDetail extends React.PureComponent {
      state = {
          id: '',
@@ -15,6 +18,7 @@ import ReactMarkdown from "react-markdown";
      componentDidMount() {
          const id = this.props.match.params.id;
          const {context} = this.props;
+         // API call
          context.data.getCourse(id)
              .then(data => {
                  if(data.course){
@@ -33,7 +37,8 @@ import ReactMarkdown from "react-markdown";
                  }
              })
              .catch(err => {
-                 this.setState({exists: false});
+                 console.log(err);
+                 this.props.history.push('/error'); // Handling rejected promises
              })
          ;
      }
@@ -45,6 +50,8 @@ import ReactMarkdown from "react-markdown";
          const {context} = this.props;
          const authUser = context.authenticatedUser;
          let html;
+
+         // If the current course was created by current user then Update and delete buttons will be added
          if(authUser){
              if(authUser.id === this.state.userId ){
                  const {id} = this.state;
@@ -96,6 +103,8 @@ import ReactMarkdown from "react-markdown";
             </div>
         )
     }
+
+    // API call for DEL course
     deleteCourse = () => {
          const {context} = this.props;
          const user = context.authenticatedUser;
@@ -108,7 +117,6 @@ import ReactMarkdown from "react-markdown";
              .catch(err => {
                  console.log(err);
              });
-         console.log('Deleted');
     };
 }
 
