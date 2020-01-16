@@ -6,8 +6,8 @@ const Forbidden = () => {
     return (
         <div className="bounds">
             <h1>Forbidden</h1>
-            <p>Oh oh! You can't access this page.</p>
-            <Link to="/">Return</Link>
+            <p>Sorry, You are not allowed here</p>
+            <Link to="/">Home</Link>
         </div>
     )
 }

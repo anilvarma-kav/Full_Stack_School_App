@@ -54,7 +54,7 @@ router.get('/:id', asyncHandler(async(req, res) => {
     }
     else {
         res.status(404).json({
-            message: 'Course not found'
+            errors: ['Course not found']
         });
     }
 }));
@@ -146,7 +146,7 @@ router.put('/:id', [
 }));
 
 // Route to delete(id) course with given "id"
-// This is an authenticated route 
+// This is an authenticated route
 router.delete('/:id', authenticateUser, asyncHandler(async (req, res) => {
 
     const course = await Course.findByPk(req.params.id);

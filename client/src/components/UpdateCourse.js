@@ -20,21 +20,31 @@ export default class UpdateCourse extends React.PureComponent {
         const {context} = this.props;
         context.data.getCourse(id)
             .then(data => {
-                if(context.authenticatedUser.id !== data.course.userId){
-                    this.setState({forbidden : true});
+                console.log(data);
+                if(data.course){
+                    if(context.authenticatedUser.id !== data.course.userId){
+                        this.setState({forbidden : true});
+                    }
+                    else {
+                        this.setState({
+                            id: data.course.id,
+                            title: data.course.title,
+                            description : data.course.description,
+                            estimatedTime: data.course.estimatedTime,
+                            materialsNeeded:data.course.materialsNeeded,
+                            user: data.course.user,
+                            userId: data.course.userId,
+                            exists: true,
+                        });
+                    }
                 }
-                else {
-                    this.setState({
-                        id: data.course.id,
-                        title: data.course.title,
-                        description : data.course.description,
-                        estimatedTime: data.course.estimatedTime,
-                        materialsNeeded:data.course.materialsNeeded,
-                        user: data.course.user,
-                        userId: data.course.userId,
-                        exists: true,
-                    });
+                else if(data.errors){
+                    this.setState({exists: false});
                 }
+                else{
+                    this.props.history.push('/error');
+                }
+
             })
             .catch(err => {
                 console.log(err);

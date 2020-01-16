@@ -33,7 +33,6 @@ import ReactMarkdown from "react-markdown";
                  }
              })
              .catch(err => {
-                 console.log(err);
                  this.setState({exists: false});
              })
          ;
@@ -52,7 +51,7 @@ import ReactMarkdown from "react-markdown";
                  html = (
                      <span>
                         <a className="button" href={`/courses/${id}/update`}>Update Course</a>
-                        <a className="button" onClick={this.deleteCourse}>Delete Course </a>
+                        <a className="button" onClick={this.deleteCourse} href={`/`}>Delete Course </a>
                      </span>
              );
              }
