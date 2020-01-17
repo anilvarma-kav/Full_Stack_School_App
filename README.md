@@ -1,5 +1,7 @@
 # Full_Stack_School_App
  Provide a way for users to administer a school database containing information about courses
+ 
+ * Hosted using firbase - [https://school-courses-app.firebaseapp.com](https://school-courses-app.firebaseapp.com)
 
 ## About the Project
 
