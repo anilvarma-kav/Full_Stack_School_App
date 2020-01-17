@@ -152,8 +152,8 @@ export default class UpdateCourse extends React.PureComponent {
                     this.setState({errors});
                 }
                 else{
-                    console.log(`Course: ${course.title} successfully created`);
-                    this.props.history.push('/');
+                    console.log(`Course: ${course.title} successfully updated`);
+                    this.props.history.push(`/courses/${this.state.id}`);
                 }
             })
             .catch( err => {
@@ -162,6 +162,6 @@ export default class UpdateCourse extends React.PureComponent {
             })
     };
     cancel = () => {
-        this.props.history.push('/');
+        this.props.history.push(`/courses/${this.state.id}`);
     };
 }
