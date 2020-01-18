@@ -3,6 +3,7 @@ import {Link, withRouter} from "react-router-dom";
 
 // React Markdown for nice formatting while displaying the course details
 import ReactMarkdown from "react-markdown";
+import Loading from "./Loading";
 
  class CourseDetail extends React.PureComponent {
      state = {
@@ -13,6 +14,7 @@ import ReactMarkdown from "react-markdown";
          materialsNeeded:'',
          user: {},
          userId: '',
+         loading: true,
          exists: true,
      };
      componentDidMount() {
@@ -30,6 +32,7 @@ import ReactMarkdown from "react-markdown";
                          user: data.course.user,
                          userId: data.course.userId,
                          exists: true,
+                         loading: false
                      });
                  }
                  else {
@@ -63,45 +66,52 @@ import ReactMarkdown from "react-markdown";
              );
              }
          }
-        return (
-            <div>
-                <div className="actions--bar">
-                    <div className="bounds">
-                        <div className="grid-100">
-                        {html}
-                        <Link className="button button-secondary" to="/">Return to List</Link>
+         if(this.state.loading){
+             return (
+                 <Loading/>
+             )
+         }
+         else {
+             return (
+                 <div>
+                     <div className="actions--bar">
+                         <div className="bounds">
+                             <div className="grid-100">
+                                 {html}
+                                 <Link className="button button-secondary" to="/">Return to List</Link>
 
-                        </div>
-                    </div>
-                </div>
-                <div className="bounds course--detail">
-                    <div className="grid-66">
-                        <div className="course--header">
-                            <h4 className="course--label">Course</h4>
-                            <h3 className="course--title">{this.state.title}</h3>
-                            <p>By {this.state.user.firstName} {this.state.user.lastName}</p>
-                        </div>
-                        <div className="course--description">
-                             <ReactMarkdown>{this.state.description}</ReactMarkdown>
-                        </div>
-                    </div>
-                    <div className="grid-25 grid-right">
-                        <div className="course--stats">
-                            <ul className="course--stats--list">
-                                <li className="course--stats--list--item">
-                                    <h4>Estimated Time</h4>
-                                    <h3>{this.state.estimatedTime}</h3>
-                                </li>
-                                <li className="course--stats--list--item">
-                                    <h4>Materials Needed</h4>
-                                    <ReactMarkdown>{this.state.materialsNeeded}</ReactMarkdown>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
+                             </div>
+                         </div>
+                     </div>
+                     <div className="bounds course--detail">
+                         <div className="grid-66">
+                             <div className="course--header">
+                                 <h4 className="course--label">Course</h4>
+                                 <h3 className="course--title">{this.state.title}</h3>
+                                 <p>By {this.state.user.firstName} {this.state.user.lastName}</p>
+                             </div>
+                             <div className="course--description">
+                                 <ReactMarkdown>{this.state.description}</ReactMarkdown>
+                             </div>
+                         </div>
+                         <div className="grid-25 grid-right">
+                             <div className="course--stats">
+                                 <ul className="course--stats--list">
+                                     <li className="course--stats--list--item">
+                                         <h4>Estimated Time</h4>
+                                         <h3>{this.state.estimatedTime}</h3>
+                                     </li>
+                                     <li className="course--stats--list--item">
+                                         <h4>Materials Needed</h4>
+                                         <ReactMarkdown>{this.state.materialsNeeded}</ReactMarkdown>
+                                     </li>
+                                 </ul>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             )
+         }
     }
 
     // API call for DEL course

@@ -751,3 +751,15 @@ input:focus {
 .course--description textarea {
   margin-bottom: 20px;
 }
+.centered {
+  height: 10em;
+  position: relative
+}
+.centered svg {
+  margin: 0;
+  background: yellow;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%) }
